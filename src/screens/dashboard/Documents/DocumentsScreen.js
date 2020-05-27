@@ -1230,8 +1230,10 @@ class DocumentsScreen extends Component {
 
 	createTemplate = async (title, description, isFile) => {
 		try {
+			// eslint-disable-next-line no-unused-vars
 			const response = await createTemplate(title, description, isFile);
 		} catch (err) {
+			// eslint-disable-next-line no-console
 			console.log('err', err);
 		}
 	}
@@ -1560,26 +1562,29 @@ class DocumentsScreen extends Component {
 	}
 
 	selecetedDocUser = (docs) => {
-		newList = this.state.listDocs.concat(docs);
+		let doc = docs;
+
+		if (this.state.listDocs.find(item => item === docs)) {
+			doc = {
+				...doc,
+				id: doc.id + 1,
+			};
+		}
+
+		newList = this.state.listDocs.concat(doc);
 		this.setState({
-			isSelected: docs,
+			isSelected: doc,
 		});
 	}
 
 	handleDocsUser = (e) => {
 		e.preventDefault();
-		if (this.state.listDocs.find(item => item === this.state.isSelected)) {
-			this.setState({
-				isErrorDoc: true,
-			});
-		} else {
-			this.setState({
-				modalListDoc: false,
-				listDocs: newList,
-				isSelected: '',
-				isErrorDoc: false,
-			});
-		}
+		this.setState({
+			modalListDoc: false,
+			listDocs: newList,
+			isSelected: '',
+			isErrorDoc: false,
+		});
 	}
 
 	handleSelectOrg = (orgs) => {
